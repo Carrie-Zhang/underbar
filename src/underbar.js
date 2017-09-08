@@ -81,11 +81,11 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var output = [];
-    for (var i = 0; i < collection.length; i++) {
-      if (test(collection[i])) {
-        output.push(collection[i]);
+    _.each(collection, function(item) {
+      if (test(item)) {
+        output.push(item);
       }
-    }
+    });
     return output;
   };
 
@@ -93,17 +93,19 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    var output = [];
-    for (var i = 0; i < collection.length; i++) {
-      if (test(collection[i]) === false) {
-        output.push(collection[i]);
-      }
-    }
-    return output;
+    return _.filter(collection, function(item) {
+      return !test(item);
+    });
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var result = [];
+    var sortedArr = array.sort();
+    _.each(sortedArr, function(item) {
+      result.includes(item) ? item : result.push(item);
+    })
+    return result;
   };
 
 
@@ -112,6 +114,11 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var result = [];
+    _.each(collection, function(item) {
+      result.push(iterator(item));
+    });
+    return result;
   };
 
   /*
@@ -153,6 +160,16 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    // var result = [];
+    // _.each(collection, function(item) {
+    //   if (accumulator === undefined) {
+    //     accumulator = collection[0];
+    //   } else {
+    //     accumulator = iterator(item);
+    //     result.push(accumulator);
+    //   }
+    // });
+    // return result;
   };
 
   // Determine if the array or object contains a given value (using `===`).
