@@ -101,8 +101,8 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
     var result = [];
-    var sortedArr = array.sort();
-    _.each(sortedArr, function(item) {
+    // var sortedArr = array.sort();
+    _.each(array, function(item) {
       result.includes(item) ? item : result.push(item);
     })
     return result;
@@ -230,11 +230,29 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    _.each(Array.prototype.slice.call(arguments), function(source) {
+      if (source) {
+        for (var key in source) {
+          obj[key] = source[key];
+        }
+      }
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    _.each(Array.prototype.slice.call(arguments), function(source) {
+      if (source) {
+        for (var key in source) {
+          if (!obj.hasOwnProperty(key)) {
+            obj[key] = source[key];
+          }
+        }
+      }
+    });
+    return obj;
   };
 
 
