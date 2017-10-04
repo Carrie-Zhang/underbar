@@ -160,9 +160,11 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var init = arguments.length === 2;
     _.each(collection, function(item) {   
-    if (accumulator === undefined) {
+    if (init) {
       accumulator = item;
+      init = false;
     } else {
       accumulator = iterator(accumulator, item);
     }
@@ -295,15 +297,25 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+  // _.memoize = function(func) {
+  //   var memo = {};
+  //   var slice = Array.prototype.slice;
+  //   return function() {
+  //     var args = slice.call(arguments);
+  //     if (args in memo) {
+  //       return memo[args];
+  //     } 
+  //     return (memo[args] = func.apply(this, args));
+  //   }
+  // };
   _.memoize = function(func) {
-    var memo = {};
-    var slice = Array.prototype.slice;
+    var output = {};
     return function() {
-      var args = slice.call(arguments);
-      if (args in memo) {
-        return memo[args];
-      } 
-      return (memo[args] = func.apply(this, args));
+      var arg = JSON.stringify(arguments);
+      if(!output[arg]) {
+        output[arg] = func.apply(this, arguments);
+      }
+      return output[arg];
     }
   };
 
